@@ -1,0 +1,119 @@
+STEP 1 : Lets input the details given such as the type, 
+date and city.
+
+SELECT *
+FROM crime_scene_report
+WHERE type = 'murder' AND date = 20180115 AND city = 'SQL City';
+
+RESULT : The security footage shows that there were 2 witnesses 
+in SQL city. The first witnesses live at the last house in 
+"Northwestern Dr".
+The second witness named Annabel, lives somwhere on 
+"Franklin Ave".
+
+STEP 2 : To get the names of the witnesses.
+
+SELECT *
+FROM person AS p
+WHERE address_street_name LIKE '%Northwestern Dr%'
+ORDER BY address_number desc
+LIMIT 1;
+
+SELECT *
+FROM person AS p
+WHERE address_street_name LIKE 'Franklin Ave'
+AND name LIKE '%Annabel%'
+LIMIT 1;
+
+RESULT : The name of witness 1 is Morty Schapiro and the 
+name of witness 2 is Annabel Miller.
+
+STEP 3 : The statement of the two witnesses.
+
+SELECT *
+FROM interview
+WHERE person_id IN (14887, 16371);
+
+RESULT : The first witness, Morty Schapiro said "I heard a 
+gunshot and then saw a man run out". He had a "Get Fit Now 
+Gym" bag. The membership number on the bag started with 
+"48Z". Only gold members have those bags. The man got into 
+a car with a plate number that included "H42W".
+
+The second witness, Annabel Miller said "I saw the murder 
+happen and I recognized the killer from my gym when I was 
+working out last week on January the 9th.
+
+SEP 4 : The license number with the interview given by one 
+of the witnesses.
+
+SELECT *
+FROM drivers_license
+WHERE plate_number LIKE '%H42W%';
+
+RESULT : There are two males with "H42W" in their license 
+number.
+
+STEP 5 : The names and other personal information of the 
+two male.
+
+SELECT *
+FROM person
+WHERE license_id = '423327' OR license_id = '664760';
+
+RESULT :  The names of the two people that have a license 
+number containing "H42W" are Tushar Chandra and Jeremy 
+Bowers.
+
+STEP 6 : Check their gym membership.
+
+SELECT *
+FROM get_fit_now_member
+WHERE person_id = '51739' OR person_id = '67318';
+
+RESULT : It can be seen that Jeremy Bowers committed the 
+murder.
+
+STEP 7 : Jeremy Bowers interview.
+
+SELECT *
+FROM interview
+WHERE person_id = 67318;
+
+RESULT : Jeremy Bowers said "I was hired by a woman with a 
+lot of money. I don't know her name but I know she's around 
+5'5" (65") or 5'7" (67"). She has red hair and she drives 
+a Tesla Model S. I know that she attended the SQL Symphony 
+Concert 3 times in December 2017." 
+
+STEP 8 : The woman who hired Jeremy Bowers.
+
+SELECT *
+FROM drivers_license
+WHERE car_make = 'Tesla' AND car_model = 'Model S' AND gender = 'female' AND hair_color = 'red';
+
+RESULT : There are three women driving a Model S Tesla with 
+red hair color.
+
+STEP 9 : The personal details of the three women.
+
+SELECT *
+FROM person
+WHERE license_id = '202298' OR license_id = '291182' OR license_id = '918773';
+
+RESULT : The names of the women are Red Korb, Regina George 
+and Miranda Priestly.
+
+STEP 10 : Who amongst these three women attended the SQL 
+Symphony concert three times in December of 2017.
+
+SELECT person_id, count(*), event_name
+FROM facebook_event_checkin
+GROUP BY person_id
+having count(*) = 3 AND event_name = 'SQL Symphony Concert' AND date LIKE '%201712%';
+
+RESULT : The person_ID 99716 attended the SQL Symphony 
+concert three times in December of 2017.
+
+
+
